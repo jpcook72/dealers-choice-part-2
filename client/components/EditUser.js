@@ -1,9 +1,9 @@
 import React from "react"
 import { connect } from 'react-redux';
-import { createUserThunk } from '../store.js';
+import { editUserThunk } from '../store.js';
 import UserForm from './UserForm.js';
 
-class CreateUser extends React.Component {
+class EditUser extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -21,13 +21,18 @@ class CreateUser extends React.Component {
 
     handleSubmit(evt) {
         evt.preventDefault()
-        this.props.createUser(this.state.userName, this.state.stateName);
+        console.log('in handle submit', this.props.editUser, this.state.userName, this.state.stateName, this.props.user)
+        this.props.editUser(this.state.userName, this.state.stateName, this.props.user);
+        console.log('past edit user')
         this.setState({
             userName: '',
             stateName: ''
         })
     }
 
+    componentDidMount() {
+        this.setState({userName: this.props.user.name, stateName: this.props.user.state})
+    }
 
     render() {
         const { userName, stateName } = this.state
@@ -38,12 +43,19 @@ class CreateUser extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+        return {
+            user: state.users[0]
+        }
+    }
+
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        createUser: (user, state) => {
-            dispatch(createUserThunk(user, state))
+        editUser: (username, state, user) => {
+            dispatch(editUserThunk(username, state, user))
         }
     }
 }
 
-export default connect(null, mapDispatchToProps)(CreateUser)
+export default connect(mapStateToProps, mapDispatchToProps)(EditUser)

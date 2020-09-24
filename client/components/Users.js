@@ -1,19 +1,21 @@
 import React from "react"
 import { connect } from 'react-redux';
-import {userThunkCreator} from '../store.js'
+import {userThunkGetter} from '../store.js'
+import {Link} from 'react-router-dom'
 
 class Users extends React.Component {
     componentDidMount() {
-        console.log('in mount!')
         this.props.getUsers();
-        console.log('the props are', this.props)
     }
 
     render() {
         console.log('rendering', this.props);
         return(<div>
             {
-                this.props.users ? this.props.users.map(user => <div>{user.name} -- {user.state} </div>) : (<p>hey there</p>)
+                this.props.users ? this.props.users.map(user => 
+                <div>
+                    <Link to={`/user/${user.id}`}>{user.name} -- {user.state} </Link>
+                </div>) : null
             }
         </div>)
     }
@@ -28,7 +30,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getUsers: () => {
-            return dispatch(userThunkCreator())
+            return dispatch(userThunkGetter())
         }
     }
 }

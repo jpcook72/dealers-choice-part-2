@@ -1,9 +1,43 @@
 import React from "react"
+import { connect } from 'react-redux';
+import {singleUserThunkGetter, createUserThunk } from '../store.js'
+import EditUser from './EditUser.js'
 
-export default class SingleUser extends React.Component {
+class SingleUser extends React.Component {
+    componentDidMount() {
+        const userId = this.props.match.params.userId;
+        this.props.getUser(userId)
+    }
+    componentDidUpdate() {
+        const userId = this.props.match.params.userId;
+        this.props.getUser(userId)
+    }
     render() {
+        const user = this.props.user
+        if (!user) return null
         return(
-            <p>hey singleuser</p>
+            <div>
+                {
+                    user ? <div>{`${user.name} -- ${user.state}`}</div> : null
+                }
+                <EditUser />
+            </div>
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.users[0]
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getUser: (userId) => {
+            return dispatch(singleUserThunkGetter(userId))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleUser)

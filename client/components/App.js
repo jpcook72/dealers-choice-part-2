@@ -16,7 +16,7 @@ export default class App extends React.Component {
 					<Route path='/' exact component={USAMap} />
 					<Route path='/users' exact component={Users} />
 					<Route path='/users/create' exact component={CreateUser} />
-					<Route path='/user' exact component={SingleUser} />
+					<Route path="/user/:userId" exact component={SingleUser}/>
 				</div>
 			</Router>
 
