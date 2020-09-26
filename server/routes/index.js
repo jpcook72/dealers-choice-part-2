@@ -4,7 +4,9 @@ const User = require("../db/models/User.js");
 
 router.get('/users', async (req,res,next) => {
     try {
-        const users = await User.findAll()
+        const users = await User.findAll({
+            include: [State]
+        })
         res.json(users);
     }
     catch(err) {
@@ -34,7 +36,6 @@ router.get('/users/:id', async(req,res,next) => {
 
 router.post('/users', async(req,res,next) => {
     try {
-        console.log('top of post', req.body)
         const newObj = { name: req.body.name }
         const checkState = await State.findAll({
             where: {
@@ -49,7 +50,6 @@ router.post('/users', async(req,res,next) => {
             newObj.stateId = newState.id
         }
         const newUser = await User.create(newObj)
-        console.log('bottom of post', newUser)
         res.json(newUser);
     }
     catch(err) {
@@ -59,14 +59,12 @@ router.post('/users', async(req,res,next) => {
 
 router.put('/users/:id', async(req,res,next) => {
     try {
-        console.log('top of put', req.body);
         const newObj = { name: req.body.name }
         const checkState = await State.findAll({
             where: {
                 name: req.body.state.toUpperCase()
             }
         })
-        console.log('mid of put', checkState);
         if (checkState.length) {
             newObj.stateId = checkState[0].id
         }
@@ -75,9 +73,10 @@ router.put('/users/:id', async(req,res,next) => {
             newObj.stateId = newState.id
         }
         const editedUser = await User.findByPk(req.params.id)
-        editedUser.update(newObj)
-        console.log('end of put', editedUser);
-        res.json(editedUser);
+        await editedUser.update(newObj)
+        res.json(await User.findByPk(req.params.id, {
+            include: [State]
+        }));
     }
     catch(err) {
         next(err)

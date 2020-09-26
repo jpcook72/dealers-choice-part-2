@@ -9,7 +9,6 @@ class Users extends React.Component {
     }
 
     render() {
-        console.log('rendering', this.props);
         return(<div>
             {
                 this.props.users ? this.props.users.map(user => 

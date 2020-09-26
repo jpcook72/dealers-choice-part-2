@@ -4,8 +4,7 @@ import NavBar from "./NavBar.js"
 import {Route} from 'react-router-dom'
 import {HashRouter as Router} from "react-router-dom"
 import Users from "./Users.js"
-import CreateUser from "./CreateUser.js"
-import SingleUser from "./SingleUser.js"
+import EditUser from "./EditUser.js"
 
 export default class App extends React.Component {
 	render() {
@@ -15,8 +14,8 @@ export default class App extends React.Component {
 					<NavBar />
 					<Route path='/' exact component={USAMap} />
 					<Route path='/users' exact component={Users} />
-					<Route path='/users/create' exact component={CreateUser} />
-					<Route path="/user/:userId" exact component={SingleUser}/>
+					<Route path='/users/create' exact component={EditUser} />
+					<Route path="/user/:userId" exact component={EditUser}/>
 				</div>
 			</Router>
 
